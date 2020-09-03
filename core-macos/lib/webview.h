@@ -324,6 +324,7 @@ WEBVIEW_API int webview_init(struct webview *w) {
   w->priv.scroller = gtk_scrolled_window_new(NULL, NULL);
   gtk_container_add(GTK_CONTAINER(w->priv.window), w->priv.scroller);
 
+
   WebKitUserContentManager *m = webkit_user_content_manager_new();
   webkit_user_content_manager_register_script_message_handler(m, "external");
   g_signal_connect(m, "script-message-received::external",
@@ -2043,6 +2044,15 @@ WEBVIEW_API int webview_init(struct webview *w) {
   title = objc_msgSend(get_nsstring("Quit "),
                        sel_registerName("stringByAppendingString:"), appName);
   item = create_menu_item(title, "terminate:", "q");
+  objc_msgSend(appMenu, sel_registerName("addItem:"), item);
+
+  item = create_menu_item(get_nsstring("Copy"), "copy:", "c");
+  objc_msgSend(appMenu, sel_registerName("addItem:"), item);
+
+  item = create_menu_item(get_nsstring("Paste"), "paste:", "v");
+  objc_msgSend(appMenu, sel_registerName("addItem:"), item);
+
+  item = create_menu_item(get_nsstring("Select All"), "selectAll:", "a");
   objc_msgSend(appMenu, sel_registerName("addItem:"), item);
 
   objc_msgSend(objc_msgSend((id)objc_getClass("NSApplication"),
